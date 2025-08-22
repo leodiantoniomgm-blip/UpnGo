@@ -1,0 +1,120 @@
+ **React Native** project setup and the core screens. You can customize and expand this code:
+
+### 1. Set up a new React Native project
+```bash
+npx react-native init RideShareApp
+cd RideShareApp
+```
+
+### 2. Install dependencies
+```bash
+npm install react-navigation react-navigation-stack react-native-maps
+npx pod-install
+```
+
+### 3. Sample code for main `App.js` with registration, booking, and map screens
+
+```jsx
+// App.js
+import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+
+import RegistrationScreen from './screens/RegistrationScreen';
+import BookingScreen from './screens/BookingScreen';
+
+const Stack = createStackNavigator();
+
+export default function App() {
+  return (
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName="Registration">
+        <Stack.Screen name="Registration" component={RegistrationScreen} />
+        <Stack.Screen name="Booking" component={BookingScreen} />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+}
+```
+
+### 4. `screens/RegistrationScreen.js`
+```jsx
+// screens/RegistrationScreen.js
+import React, { useState } from 'react';
+import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
+
+export default function RegistrationScreen({ navigation }) {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+
+  const handleRegister = () => {
+    // Here you can handle registration logic
+    navigation.navigate('Booking');
+  };
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}>Register</Text>
+      <TextInput
+        placeholder="Name"
+        style={styles.input}
+        value={name}
+        onChangeText={setName}
+      />
+      <TextInput
+        placeholder="Email"
+        style={styles.input}
+        value={email}
+        onChangeText={setEmail}
+        keyboardType="email-address"
+      />
+      <Button title="Register" onPress={handleRegister} />
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: { flex: 1, justifyContent: 'center', padding: 20 },
+  title: { fontSize: 24, marginBottom: 20, textAlign: 'center' },
+  input: { height: 50, borderColor: 'gray', borderWidth: 1, marginBottom: 15, paddingHorizontal: 10 },
+});
+```
+
+### 5. `screens/BookingScreen.js` (including a map)
+
+```jsx
+// screens/BookingScreen.js
+import React from 'react';
+import { View, Button, StyleSheet } from 'react-native';
+import MapView, { Marker } from 'react-native-maps';
+
+export default function BookingScreen() {
+  const region = {
+    latitude: 37.78825,
+    longitude: -122.4324,
+    latitudeDelta: 0.0922,
+    longitudeDelta: 0.0421,
+  };
+
+  const handleStartRide = () => {
+    alert('Driver is on the way...');
+    // Placeholder for driver tracking logic
+  };
+
+  return (
+    <View style={{ flex: 1 }}>
+      <MapView style={styles.map} initialRegion={region}>
+        <Marker coordinate={{ latitude: region.latitude, longitude: region.longitude }} title="Your Location" />
+      </MapView>
+      <View style={styles.buttonContainer}>
+        <Button title="Start Ride" onPress={handleStartRide} />
+      </View>
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  map: { flex: 1 },
+  buttonContainer: { padding: 10, backgroundColor: 'white' },
+});
+``
